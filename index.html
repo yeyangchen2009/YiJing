@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+    <title>64卦展示页面</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background-color: #e8e0d0;
+            padding: 30px;
+            font-family: 'Noto Serif SC', serif;
+            background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="%23e8e0d0"/><path d="M0 0L100 100M100 0L0 100" stroke="%23d7ccc8" stroke-width="0.5" stroke-opacity="0.3"/></svg>');
+        }
+        
+        h1 {
+            font-family: 'Ma Shan Zheng', cursive;
+            font-size: 48px;
+            color: #5d4037;
+            text-align: center;
+            margin: 40px 0;
+            letter-spacing: 5px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        h1::after {
+            content: '';
+            display: block;
+            width: 200px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #9e2a2b, transparent);
+            margin: 20px auto 0;
+        }
+        
+        .hexagram-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 30px;
+            padding: 40px;
+            margin-bottom: 50px;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .hexagram-item {
+            background: #f8f3e6;
+            border-radius: 15px;
+            padding: 25px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hexagram-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #9e2a2b, #bb3e03, #e9c46a);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .hexagram-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
+        .hexagram-item:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .list-hexagram-img {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin: 0 auto 20px;
+            width: 120px;
+        }
+        
+        .list-hexagram-img .yao-row {
+            width: 120px;
+            height: 8px;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .list-hexagram-img .yang-line {
+            width: 120px;
+            height: 8px;
+            background-color: #333;
+            align-self: center;
+        }
+        
+        .list-hexagram-img .yin-line {
+            width: 120px;
+            height: 8px;
+            background-color: #333;
+            align-self: center;
+        }
+        
+        .hexagram-number {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 14px;
+            color: rgba(93, 64, 55, 0.4);
+            font-weight: bold;
+        }
+        
+        .hexagram-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        }
+        
+        .hexagram-item:active {
+            background-color: #e0d8c8; /* 点击时的背景色变化反馈 */
+            transform: scale(0.98); /* 轻微缩放反馈 */
+        }
+        
+        .hexagram-name {
+            font-size: 18px;
+            color: #5d4037;
+            margin-top: 10px;
+        }
+        
+        /* 模态框样式 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0,0,0,0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999; /* 提高z-index确保显示在最上层 */
+            display: none;
+        }
+        
+        .hexagram-card {
+            width: 900px;
+            height: 1200px;
+            background: #f8f3e6;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            padding: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #5d4037;
+            background: none;
+            border: none;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background-color 0.3s;
+        }
+        
+        .close-btn:hover {
+            background-color: rgba(0,0,0,0.1);
+        }
+        
+        .card-title {
+            font-family: 'Ma Shan Zheng', cursive;
+            font-size: 48px;
+            color: #5d4037;
+            text-align: center;
+            margin-bottom: 50px;
+            letter-spacing: 3px;
+        }
+        
+        .hexagram-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #9e2a2b, #bb3e03, #e9c46a, #4895ef, #4cc9f0, #480ca8, #7209b7);
+        }
+        
+        .top-section {
+            display: flex;
+            gap: 50px;
+            margin-bottom: 60px;
+            height: 400px;
+        }
+        
+        .left-block, .right-block {
+            flex: 1;
+        }
+        
+        .hexagram-title {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #d7ccc8;
+        }
+        
+        .horizontal-layout {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+        
+        .trigram-info {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .trigram-label {
+            font-size: 22px;
+            color: #5d4037;
+        }
+        
+        .list-hexagram-img { display: flex; flex-direction: column; gap: 12px; margin: 0 auto 20px; width: 120px; }
+        .hexagram-item { height: 280px; display: flex; flex-direction: column; justify-content: space-between; }
+        .hexagram-name { font-size: 20px; color: #5d4037; margin-top: auto; padding-top: 15px; }
+        
+        .list-hexagram-img .yao-row {
+            width: 100px;
+            height: 4px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .hexagram-img .yao-row {
+            width: 200px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .hexagram-card-image {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .hexagram-card-image .yao-row {
+            width: 200px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .hexagram-card-image .yang-line {
+            width: 180px;
+            height: 6px;
+            background-color: #333;
+            align-self: center;
+        }
+
+        .hexagram-card-image .yin-line {
+            width: 180px;
+            height: 6px;
+            background: linear-gradient(90deg, #333 0%, #333 40%, transparent 40%, transparent 60%, #333 60%, #333 100%);
+        }
+
+        .yao-table th {
+            background-color: #f1e9dc;
+            font-weight: 600;
+            color: #5d4037;
+            width: 50%;
+        }
+        
+        .list-hexagram-img .yang-line {
+            width: 80px;
+            height: 4px;
+            background-color: #333;
+            align-self: center;
+        }
+
+        .hexagram-img .yang-line {
+            width: 180px;
+            height: 6px;
+            background-color: #333;
+            align-self: center;
+        }
+        
+        .list-hexagram-img .yin-line {
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #333 0%, #333 40%, transparent 40%, transparent 60%, #333 60%, #333 100%);
+        }
+
+        .hexagram-img .yin-line {
+            width: 180px;
+            height: 6px;
+            background: linear-gradient(90deg, #333 0%, #333 40%, transparent 40%, transparent 60%, #333 60%, #333 100%);
+        }
+        
+        .hexagram-text {
+            margin-bottom: 30px;
+        }
+        
+        .text-title {
+            font-size: 24px;
+            color: #5d4037;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .text-content {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #2d2d2d;
+            text-align: justify;
+        }
+        
+        .bottom-section {
+            margin-top: 20px;
+        }
+        
+        .yao-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .yao-table th, .yao-table td {
+            border: 1px solid #d7ccc8;
+            padding: 12px 15px;
+            text-align: center;
+            font-size: 17px;
+        }
+        
+        .yao-table th {
+            background-color: #f1e9dc;
+            font-weight: 600;
+            color: #5d4037;
+        }
+        
+        .yao-table tr:nth-child(even) {
+            background-color: #faf6ef;
+        }
+        
+        .card-footer {
+            position: absolute;
+            bottom: 30px;
+            right: 60px;
+            font-size: 18px;
+            color: #795548;
+            font-style: italic;
+        }
+    </style>
+</head>
+<!-- 移除CSS区块中的HTML标签 -->
+<body>
+    <h1>六十四卦列表</h1>
+    <p style="text-align: center; color: #5d4037; margin: -30px 0 50px; font-size: 18px;">点击卦象查看详细解释与爻辞</p>
+    
+    <!-- 卦列表容器 -->
+    <ul class="hexagram-grid" id="hexagramList">
+        <!-- 动态生成卦列表项 -->
+    </ul>
+    
+@media (max-width: 768px) {
+  .hexagram-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    padding: 20px;
+  }
+  h1 {
+    font-size: 36px;
+  }
+  .hexagram-item {
+    padding: 20px 15px;
+  }
+}
+    
+    <!-- 卦卡片模态框 -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="hexagram-card" id="hexagramCard">
+            <button class="close-btn" id="closeBtn">&times;</button>
+            <div class="card-title"></div>
+            
+            <div class="top-section">
+                <div class="left-block">
+                    <div class="hexagram-title">卦画</div>
+                    <div class="horizontal-layout">
+                        <div class="trigram-info">
+                            <div class="trigram-label">上卦：</div>
+                            <div class="trigram-label">下卦：</div>
+                        </div>
+                        
+                        <div class="hexagram-card-image">
+                            {{#each hexagram.爻画}}
+                            <div class="yao-row {{this === '_1' ? 'yang-line' : 'yin-line'}}"></div>
+                            {{/each}}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="right-block">
+                    <div class="hexagram-text">
+                        <div class="text-title">卦辞</div>
+                        <div class="text-content">{{卦辞}}</div>
+                    </div>
+                    <div class="hexagram-text">
+                        <div class="text-title">彖曰</div>
+                        <div class="text-content">{{彖曰}}</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bottom-section">
+                <div class="hexagram-title">爻辞与象辞</div>
+                <table class="yao-table">
+                    <thead>
+                        <tr>
+                            <th>爻辞</th>
+                            <th>象曰</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            
+            <div class="card-footer">《周易》六十四卦详解 - 第{{hexagram.序号}}卦</div>
+        </div>
+    </div>
+    <!-- 移除重复的模态框结构 -->
+    <!-- <div id="hexagram-modal" class="modal">
+      <div id="modal-content" class="modal-content">
+        <!-- Modal content will be inserted here -->
+      </div>
+    </div> -->
+    <script src="script.js"></script>
+  </body>
+</html>
+
+ 

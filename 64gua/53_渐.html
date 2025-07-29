@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+    <title>渐·风山渐，巽上艮下</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background-color: #e8e0d0;
+            padding: 30px;
+            font-family: 'Noto Serif SC', serif;
+        }
+        
+        .hexagram-card {
+            width: 900px;
+            height: 1200px;
+            background: #f8f3e6;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            padding: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hexagram-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #9e2a2b, #bb3e03, #e9c46a, #4895ef, #4cc9f0, #480ca8, #7209b7);
+        }
+        
+        .card-title {
+            font-family: '', cursive;
+            font-size: 48px;
+            color: #5d4037;
+            text-align: center;
+            margin-bottom: 50px;
+            letter-spacing: 3px;
+        }
+        
+        .top-section {
+            display: flex;
+            gap: 50px;
+            margin-bottom: 60px;
+            height: 400px;
+        }
+        
+        .left-block, .right-block {
+            flex: 1;
+        }
+        
+        .hexagram-title {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #d7ccc8;
+        }
+        
+        /* 修改为水平布局容器 */
+        .horizontal-layout {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+        
+        .trigram-info {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .trigram-label {
+            font-size: 22px;
+            color: #5d4037;
+        }
+        
+        .hexagram-img {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        
+        .yao-row {
+            width: 200px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+        }
+        
+        ._1 {
+            width: 180px;
+            height: 6px;
+            background-color: #333;
+            align-self: center;
+        }
+        
+        ._0 {
+            width: 180px;
+            height: 6px;
+            background: linear-gradient(90deg, #333 0%, #333 40%, transparent 40%, transparent 60%, #333 60%, #333 100%);
+        }
+        
+        .hexagram-text {
+            margin-bottom: 30px;
+        }
+        
+        .text-title {
+            font-size: 24px;
+            color: #5d4037;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .text-content {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #2d2d2d;
+            text-align: justify;
+        }
+        
+        .bottom-section {
+            margin-top: 20px;
+        }
+        
+        .yao-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .yao-table th, .yao-table td {
+            border: 1px solid #d7ccc8;
+            padding: 12px 15px;
+            text-align: center;
+            font-size: 17px;
+        }
+        
+        .yao-table th {
+            background-color: #f1e9dc;
+            font-weight: 600;
+            color: #5d4037;
+        }
+        
+        .yao-table tr:nth-child(even) {
+            background-color: #faf6ef;
+        }
+        
+        .card-footer {
+            position: absolute;
+            bottom: 30px;
+            right: 60px;
+            font-size: 18px;
+            color: #795548;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="hexagram-card">
+        <div class="card-title">风山渐，巽上艮下</div>
+        
+        <div class="top-section">
+            <div class="left-block">
+                <div class="hexagram-title">卦画</div>
+                <!-- 将vertical-layout改为horizontal-layout并调整结构 -->
+                <div class="horizontal-layout">
+                    <div class="trigram-info">
+                        <div class="trigram-label">上卦：巽·风</div>
+                        <div class="trigram-label">下卦：艮·山</div>
+                    </div>
+                    
+                    <div class="hexagram-img">
+                        <!-- 爻画从上到下排列（上到初） -->
+                        <div class="yao-row">
+                            <div class="_1"></div>
+                        </div>
+                        <div class="yao-row">
+                            <div class="_1"></div>
+                        </div>
+                        <div class="yao-row">
+                            <div class="_0"></div>
+                        </div>
+                        <div class="yao-row">
+                            <div class="_1"></div>
+                        </div>
+                        <div class="yao-row">
+                            <div class="_0"></div>
+                        </div>
+                        <div class="yao-row">
+                            <div class="_0"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="right-block">
+                <div class="hexagram-text">
+                    <div class="text-title">卦辞</div>
+                    <div class="text-content">女归吉，利贞。</div>
+                </div>
+                <div class="hexagram-text">
+                    <div class="text-title">彖曰</div>
+                    <div class="text-content">渐之进也，女归吉也。进得位，往有功也。进以正，可以正邦也。其位刚，得中也。止而巽，动不穷也。</div>
+                </div>
+                <!-- <div class="hexagram-text"> -->
+                    <!-- <div class="text-title">大象</div> -->
+                    <!-- <div class="text-content">山上有木，渐。君子以居贤德善俗。</div> -->
+                <!-- </div> -->
+            </div>
+        </div>
+        
+        <div class="bottom-section">
+            <div class="text-title">爻辞与小象</div>
+            <table class="yao-table">
+                <thead>
+                    <tr><th>爻辞</th><th>象曰：山上有木，渐。君子以居贤德善俗。</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>初六：鸿渐于干，小子厉，有言，无大咎。</td>
+                        <td>「小子之厉」，义无大咎也。</td>
+                    </tr>
+                    <tr>
+                        <td>六二：鸿渐于磐，饮食衎衎，吉。</td>
+                        <td>「饮食衎衎」，不素饱也。</td>
+                    </tr>
+                    <tr>
+                        <td>九三：鸿渐于陆，夫征不复，妇孕不育，凶。利御寇。</td>
+                        <td>「夫征不复」，离群丑也。「妇孕不育」，失其道也。「利御寇」，顺相保也。</td>
+                    </tr>
+                    <tr>
+                        <td>六四：鸿渐于木，或得其桷，无咎。</td>
+                        <td>「或得其桷」，顺以巽也。</td>
+                    </tr>
+                    <tr>
+                        <td>九五：鸿渐于陵，妇三岁不孕，终莫之胜，吉。</td>
+                        <td>「终莫之胜吉」，得所愿也。</td>
+                    </tr>
+                    <tr>
+                        <td>上九：鸿渐于逵，其羽可用为仪，吉。</td>
+                        <td>「其羽可用为仪吉」，不可乱也。</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="card-footer">易经六十四卦·53</div>
+    </div>
+</body>
+</html>

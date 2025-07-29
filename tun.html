@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+    <title>屯卦·水雷屯</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Noto Serif SC', serif;
+            line-height: 1.6;
+        }
+        body {
+            background-color: #f5f1e6;
+            display: flex;
+            justify-content: center;
+            padding: 30px 20px;
+            min-width: 900px;
+        }
+        .hexagram-card {
+            width: 900px;
+            height: 1200px;
+            background-color: #f8f3e6;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+            border: 2px solid #c9b18a;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            background-image: 
+                linear-gradient(rgba(120, 80, 40, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(120, 80, 40, 0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        .card-title {
+            font-family: 'Ma Shan Zheng', cursive;
+            font-size: 36px;
+            color: #8b4513;
+            border-bottom: 2px solid #c9b18a;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: 700;
+            position: relative;
+            height: 80px;
+        }
+        .card-title::before, .card-title::after {
+            content: "❦";
+            color: #c9b18a;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .card-title::before {
+            left: 50px;
+        }
+        .card-title::after {
+            right: 50px;
+        }
+        .top-section {
+            display: flex;
+            width: 100%;
+            height: 400px;
+            margin-bottom: 20px;
+        }
+        .left-block {
+            width: 35%;
+            padding-right: 20px;
+            border-right: 1px dashed #c9b18a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .hexagram-title {
+            font-size: 24px;
+            color: #8b4513;
+            font-weight: 600;
+            border-left: 6px solid #c9b18a;
+            padding-left: 12px;
+            margin-bottom: 20px;
+            align-self: flex-start;
+        }
+        .vertical-layout {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 25px;
+            width: 100%;
+        }
+        .trigram-label {
+            font-size: 22px;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .trigram-label::before {
+            content: "▷";
+            color: #8b4513;
+        }
+        /* 卦画容器 */
+        .hexagram-img {
+            padding: 25px;
+            background-color: rgba(255,255,255,0.7);
+            border: 1px solid #d4c3a8;
+            border-radius: 6px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+        }
+        /* 卦画样式 - 优化阴爻中间空白宽度 */
+        .hexagram-yao {
+            padding: 12px 0; 
+        }
+        .yao-row {
+            display: flex;
+            justify-content: center;
+            margin: 5px 0; 
+            height: 9px; 
+        }
+        /* 阳爻样式 */
+        .yang {
+            width: 180px;
+            height: 6.75px;
+            background: #5d4037;
+            position: relative;
+            top: 1.125px;
+        }
+        /* 阴爻样式 - 中间空白宽度优化 */
+        .yin {
+            width: 180px;
+            height: 6.75px;
+            position: relative;
+            top: 1.125px;
+        }
+        .yin::before, .yin::after {
+            content: '';
+            position: absolute;
+            width: 81px;
+            height: 6.75px;
+            background: #5d4037;
+        }
+        .yin::before {
+            left: 0;
+        }
+        .yin::after {
+            right: 0;
+        }
+        .right-block {
+            width: 65%;
+            padding-left: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .subtitle {
+            font-size: 24px;
+            color: #8b4513;
+            font-weight: 600;
+            border-left: 6px solid #c9b18a;
+            padding-left: 12px;
+            margin-bottom: 10px;
+        }
+        .paragraph {
+            font-size: 18px;
+            color: #555;
+            text-indent: 2em;
+            text-align: justify;
+            padding-right: 10px;
+            letter-spacing: 0.5px;
+        }
+        .table-container {
+            margin-top: 10px;
+            padding-left: 0;
+            height: 570px;
+            display: flex;
+            flex-direction: column;
+        }
+        .yao-table {
+            width: 100%;
+            border-collapse: collapse;
+            flex: 1;
+        }
+        /* 表格列宽设置为相同 */
+        .yao-table th:first-child,
+        .yao-table td:first-child {
+            width: 50%;
+        }
+        .yao-table th:last-child,
+        .yao-table td:last-child {
+            width: 50%;
+        }
+        .yao-table th,
+        .yao-table td {
+            border: 1px solid #c9b18a;
+            padding: 12px 15px;
+            text-align: left;
+            vertical-align: middle;
+            font-size: 17px;
+            color: #444;
+        }
+        .yao-table th {
+            background: #f2e9dc;
+            font-weight: 600;
+        }
+        .card-footer {
+            text-align: center;
+            margin-top: 10px;
+            color: #8b4513;
+            font-size: 18px;
+            border-top: 2px solid #c9b18a;
+            padding-top: 15px;
+            height: 60px;
+            clear: both;
+            position: relative;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+    <div class="hexagram-card">
+        <div class="card-title">屯卦·水雷屯</div>
+        
+        <div class="top-section">
+            <div class="left-block">
+                <div class="hexagram-title">卦画</div>
+                <div class="vertical-layout">
+                    <div class="trigram-label">上卦：坎·水</div>
+                    
+                    <div class="hexagram-img">
+                        <div class="hexagram-yao">
+                            <!-- 上六：六为阴爻 -->
+                            <div class="yao-row">
+                                <div class="yin"></div>
+                            </div>
+                            <!-- 九五：九为阳爻 -->
+                            <div class="yao-row">
+                                <div class="yang"></div>
+                            </div>
+                            <!-- 六四：六为阴爻 -->
+                            <div class="yao-row">
+                                <div class="yin"></div>
+                            </div>
+                            <!-- 六三：六为阴爻 -->
+                            <div class="yao-row">
+                                <div class="yin"></div>
+                            </div>
+                            <!-- 六二：六为阴爻 -->
+                            <div class="yao-row">
+                                <div class="yin"></div>
+                            </div>
+                            <!-- 初九：九为阳爻 -->
+                            <div class="yao-row">
+                                <div class="yang"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="trigram-label">下卦：震·雷</div>
+                </div>
+            </div>
+            
+            <div class="right-block">
+                <div>
+                    <div class="subtitle">卦辞</div>
+                    <div class="paragraph">屯，元亨，利贞。勿用有攸往，利建侯。</div>
+                </div>
+                
+                <div>
+                    <div class="subtitle">彖曰</div>
+                    <div class="paragraph">屯，刚柔始交而难生，动乎险中，大亨贞。雷雨之动满盈，天造草昧，宜建侯而不宁。</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="table-container">
+            <table class="yao-table">
+                <thead>
+                    <tr>
+                        <th>爻辞</th>
+                        <th>象曰：云雷，屯；君子以经纶</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>初九：磐桓，利居贞，利建侯。</td>
+                        <td>虽磐桓，志行正也。以贵下贱，大得民也。</td>
+                    </tr>
+                    <tr>
+                        <td>六二：屯如邅如，乘马班如。匪寇婚媾，女子贞不字，十年乃字。</td>
+                        <td>六二之难，乘刚也。十年乃字，反常也。</td>
+                    </tr>
+                    <tr>
+                        <td>六三：即鹿无虞，惟入于林中，君子几不如舍，往吝。</td>
+                        <td>即鹿无虞，以从禽也。君子舍之，往吝穷也。</td>
+                    </tr>
+                    <tr>
+                        <td>六四：乘马班如，求婚媾，往吉无不利。</td>
+                        <td>求而往，明也。</td>
+                    </tr>
+                    <tr>
+                        <td>九五：屯其膏，小贞吉，大贞凶。</td>
+                        <td>屯其膏，施未光也。</td>
+                    </tr>
+                    <tr>
+                        <td>上六：乘马班如，泣血涟如。</td>
+                        <td>泣血涟如，何可长也。</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="card-footer">易经六十四卦·三</div>
+    </div>
+</body>
+</html>
+    
