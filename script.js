@@ -103,7 +103,7 @@ function openModal(hexagram) {
     const yaoContainer = hexagramCard.querySelector('.hexagram-card-image');
     if (yaoContainer) {
         yaoContainer.innerHTML = '';
-        hexagram.爻画.reverse().forEach(yao => {
+        hexagram.爻画.forEach(yao => {
             const yaoRow = document.createElement('div');
             yaoRow.className = `yao-row ${yao === '_1' ? 'yang-line' : 'yin-line'}`;
             yaoContainer.appendChild(yaoRow);
